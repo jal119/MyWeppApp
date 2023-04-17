@@ -1,41 +1,30 @@
 pipeline {
-    agent any
-
+    agent {
+        docker {
+            image 'node:14-alpine'
+            label 'docker'
+        }
+    }
+    
     stages {
-        stage('Clone') {
-            steps {
-                echo 'Cloning the repository...'
-                // Replace 'your-credentials-id' with the Jenkins credentials ID for accessing your repository
-                // Replace 'your-repo-url' with your repository URL
-                git credentialsId: 'your-credentials-id', url: 'your-repo-url'
-            }
-        }
-
-        stage('Build') {
-            steps {
-                echo 'Building the application...'
-                // Replace this with your build command, e.g., 'mvn clean install'
-                sh 'echo "Build command goes here"'
-            }
-        }
-
         stage('Test') {
             steps {
-                echo 'Testing the application...'
-                // Replace this with your test command, e.g., 'mvn test'
-                sh 'echo "Test command goes here"'
+                sh 'npm install'
+                sh 'npm test'
             }
         }
-
-        stage('Deploy') {
-            steps {
-                echo 'Deploying the application...'
-                // Replace this with your deploy command, e.g., 'kubectl apply -f deployment.yaml'
-                // Replace 'your-deploy-credentials-id' with the Jenkins credentials ID for your deployment environment
-                withCredentials([usernamePassword(credentialsId: 'your-deploy-credentials-id', usernameVariable: 'DEPLOY_USER', passwordVariable: 'DEPLOY_PASS')]) {
-                    sh 'echo "Deploy command goes here"'
+        
+        stage('Build') {
+            agent {
+                docker {
+                    image 'maven:3.6-jdk-11'
+                    label 'docker'
                 }
+            }
+            steps {
+                sh 'mvn clean install'
             }
         }
     }
 }
+
