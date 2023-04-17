@@ -1,27 +1,23 @@
 pipeline {
     agent {
         docker {
-            image 'node:14-alpine'       
+            image 'maven'       
         }
     }
     
     stages {
-        stage('Test') {
-            steps {
-                sh 'npm install'
-                sh 'npm test'
+                sh 'mvn --version'
             }
         }
         
         stage('Build') {
-            agent {
-                docker {
-                    image 'maven:3.6-jdk-11'
-                    label 'docker'
+            steps {
+                sh 'echo build'
+                  
                 }
             }
             steps {
-                sh 'mvn clean install'
+                sh 'node -version'
             }
         }
     }
