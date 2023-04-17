@@ -2,9 +2,19 @@ pipeline {
     agent any
 
     stages {
-        stage('Hello') {
+        stage('Build') {
             steps {
-                echo 'Hello World'
+                echo 'Building the application...'
+                // Replace this with your build command, e.g., 'mvn clean install'
+                sh 'echo "Build command goes here"'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Testing the application...'
+                // Replace this with your test command, e.g., 'mvn test'
+                sh 'echo "Test command goes here"'
             }
         }
     }
