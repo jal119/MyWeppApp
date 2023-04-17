@@ -17,5 +17,29 @@ pipeline {
                 sh 'echo "Test command goes here"'
             }
         }
+
+        stage('Deploy') {
+            steps {
+                echo 'Deploying the application...'
+                // Replace this with your deploy command, e.g., 'kubectl apply -f deployment.yaml'
+                sh 'echo "Deploy command goes here"'
+            }
+        }
+
+        stage('Archive Artifacts') {
+            steps {
+                echo 'Archiving build artifacts...'
+                // Replace 'path/to/artifacts/*' with the correct path to your build artifacts
+                archiveArtifacts artifacts: 'path/to/artifacts/*', fingerprint: true
+            }
+        }
+
+        stage('Cleanup') {
+            steps {
+                echo 'Cleaning up the workspace...'
+                // Delete workspace when the build is done
+                deleteDir()
+            }
+        }
     }
 }
