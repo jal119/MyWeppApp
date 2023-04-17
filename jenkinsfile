@@ -2,6 +2,15 @@ pipeline {
     agent any
 
     stages {
+        stage('Clone') {
+            steps {
+                echo 'Cloning the repository...'
+                // Replace 'your-credentials-id' with the Jenkins credentials ID for accessing your repository
+                // Replace 'your-repo-url' with your repository URL
+                git credentialsId: 'your-credentials-id', url: 'your-repo-url'
+            }
+        }
+
         stage('Build') {
             steps {
                 echo 'Building the application...'
@@ -22,9 +31,11 @@ pipeline {
             steps {
                 echo 'Deploying the application...'
                 // Replace this with your deploy command, e.g., 'kubectl apply -f deployment.yaml'
-                sh 'echo "Deploy command goes here"'
+                // Replace 'your-deploy-credentials-id' with the Jenkins credentials ID for your deployment environment
+                withCredentials([usernamePassword(credentialsId: 'your-deploy-credentials-id', usernameVariable: 'DEPLOY_USER', passwordVariable: 'DEPLOY_PASS')]) {
+                    sh 'echo "Deploy command goes here"'
+                }
             }
         }
-
     }
 }
